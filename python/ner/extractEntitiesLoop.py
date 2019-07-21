@@ -280,16 +280,16 @@ def process_document(input_file, output_file):
             #sys.stdout.flush()
 
             #seems like there is a memory leak comming from mallet, so just restart it every 1,000 tweets or so
-            if totalLines % 1000 == 0:
-                start = time.time()
-                ner.stdin.close()
-                ner.stdout.close()
-                #if ner.wait() != 0:
-                #sys.stderr.write("error!\n")
-                #ner.kill()
-                os.kill(ner.pid, SIGTERM)       #Need to do this for python 2.4
-                ner.wait()
-                ner = GetNer(ner_model)
+            # if totalLines % 1000 == 0:
+            #     start = time.time()
+            #     ner.stdin.close()
+            #     ner.stdout.close()
+            #     #if ner.wait() != 0:
+            #     #sys.stderr.write("error!\n")
+            #     #ner.kill()
+            #     os.kill(ner.pid, SIGTERM)       #Need to do this for python 2.4
+            #     ner.wait()
+            #     ner = GetNer(ner_model)
 
     # Close file
     out_fp.close()
