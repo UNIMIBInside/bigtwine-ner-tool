@@ -1,13 +1,8 @@
-FROM openjdk:8-stretch
+FROM rewrew/twitter-nlp
 
-RUN apt-get update \
-  && apt-get install -y python python-pip
-RUN pip install watchdog \
-  && mkdir /tool 
-
-WORKDIR /tool
-COPY . /tool
-RUN chmod +x build.sh && ./build.sh
+COPY ./python/ner/extractEntitiesLoop.py /tool/python/ner/
 ENV TWITTER_NLP=./
 
-CMD ["python2", "/tool/main.py"]
+RUN mkdir /data
+
+CMD ["python2", "/tool/python/ner/extractEntitiesLoop.py", "/data", "--classify"]
