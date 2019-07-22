@@ -82,9 +82,9 @@ if options.working_dir is None or options.working_dir == "":
     sys.exit(-1)
 
 WORKING_DIR = options.working_dir
-INPUT_DIR = os.path.join(WORKING_DIR, 'ritter-input')
-OUTPUT_DIR = os.path.join(WORKING_DIR, 'ritter-output')
-PROCESSING_DIR = os.path.join(WORKING_DIR, 'ritter-processing')
+INPUT_DIR = os.path.join(WORKING_DIR, 'input')
+OUTPUT_DIR = os.path.join(WORKING_DIR, 'output')
+PROCESSING_DIR = os.path.join(WORKING_DIR, 'processing')
 
 if options.pos:
     posTagger = pos_tagger_stdin.PosTagger()
@@ -317,6 +317,9 @@ if __name__ == "__main__":
     while True:
         for (dirpath, dirnames, filenames) in os.walk(INPUT_DIR):
             for filename in filenames:
+                if os.path.splitext(filename)[1].lower() == '.tmp':
+                    continue
+
                 in_fpath = os.path.join(dirpath, filename)  # Input file path
                 proc_in_fpath = os.path.join(PROCESSING_DIR, filename)  # Processing input file path
                 proc_out_fpath = os.path.join(PROCESSING_DIR, filename + '.tmp')  # Processing output file path
@@ -336,4 +339,4 @@ if __name__ == "__main__":
                     os.remove(proc_in_fpath)
                 except Exception as err:
                     print >> sys.stderr, str(err)
-        time.sleep(2.0)
+        time.sleep(1.0)

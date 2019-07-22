@@ -7,7 +7,7 @@ See main repository: https://github.com/aritter/twitter_nlp
 ## Continuous processing
 Run a docker container with the following command:
 ```
-run --rm -v $PWD/test:/data -m 1G bigtwine-ner-tool
+docker run --rm -v $PWD/test:/data bigtwine-ner-tool
 ```
 
 Put input files into `./test/ritter-input`. Processed files will be available into `./test/ritter-output` named as the input.
