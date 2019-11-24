@@ -320,10 +320,9 @@ if __name__ == "__main__":
         files = filter(lambda f: not f.endswith('.tmp'), files)
 
         if len(files) > 0:
-            next_file = max(files, key=lambda x: os.path.getmtime(x))
+            in_fpath = max(files, key=lambda x: os.path.getmtime(x)) # Input file path
                 
-            filename = os.path.basename(next_file)
-            in_fpath = os.path.join(dirpath, filename)  # Input file path
+            filename = os.path.basename(in_fpath)
             proc_in_fpath = os.path.join(PROCESSING_DIR, filename)  # Processing input file path
             proc_out_fpath = os.path.join(PROCESSING_DIR, filename + '.tmp')  # Processing output file path
             out_fpath = os.path.join(OUTPUT_DIR, filename)  # Output file path
