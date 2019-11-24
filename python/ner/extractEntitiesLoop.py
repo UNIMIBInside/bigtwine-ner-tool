@@ -315,28 +315,31 @@ if __name__ == "__main__":
     make_dir_structure(WORKING_DIR)
 
     while True:
-        for (dirpath, dirnames, filenames) in os.walk(INPUT_DIR):
-            for filename in filenames:
-                if os.path.splitext(filename)[1].lower() == '.tmp':
-                    continue
+        files = [os.path.join(INPUT_DIR, f) for f in os.listdir(INPUT_DIR)]
+        files = filter(os.path.isfile, files)
+        files = filter(lambda f: not f.endswith('.tmp'), files)
 
-                in_fpath = os.path.join(dirpath, filename)  # Input file path
-                proc_in_fpath = os.path.join(PROCESSING_DIR, filename)  # Processing input file path
-                proc_out_fpath = os.path.join(PROCESSING_DIR, filename + '.tmp')  # Processing output file path
-                out_fpath = os.path.join(OUTPUT_DIR, filename)  # Output file path
+        if len(files) > 0:
+            next_file = max(files, key=lambda x: os.path.getmtime(x))
+                
+            filename = os.path.basename(next_file)
+            in_fpath = os.path.join(dirpath, filename)  # Input file path
+            proc_in_fpath = os.path.join(PROCESSING_DIR, filename)  # Processing input file path
+            proc_out_fpath = os.path.join(PROCESSING_DIR, filename + '.tmp')  # Processing output file path
+            out_fpath = os.path.join(OUTPUT_DIR, filename)  # Output file path
 
-                print >> sys.stderr, 'Moving "{0}" to "{1}"'.format(in_fpath, proc_in_fpath)
-                os.rename(in_fpath, proc_in_fpath)
+            print >> sys.stderr, 'Moving "{0}" to "{1}"'.format(in_fpath, proc_in_fpath)
+            os.rename(in_fpath, proc_in_fpath)
 
-                # Start document processing
-                process_document(proc_in_fpath, proc_out_fpath)
+            # Start document processing
+            process_document(proc_in_fpath, proc_out_fpath)
 
-                # Finalize
-                print >> sys.stderr, 'Moving "{0}" to "{1}"'.format(proc_out_fpath, out_fpath)
-                os.rename(proc_out_fpath, out_fpath)
-                try:
-                    print >> sys.stderr, 'Removing "{0}"'.format(proc_in_fpath)
-                    os.remove(proc_in_fpath)
-                except Exception as err:
-                    print >> sys.stderr, str(err)
-        time.sleep(1.0)
+            # Finalize
+            print >> sys.stderr, 'Moving "{0}" to "{1}"'.format(proc_out_fpath, out_fpath)
+            os.rename(proc_out_fpath, out_fpath)
+            try:
+                print >> sys.stderr, 'Removing "{0}"'.format(proc_in_fpath)
+                os.remove(proc_in_fpath)
+            except Exception as err:
+                print >> sys.stderr, str(err)
+        time.sleep(0.1)
